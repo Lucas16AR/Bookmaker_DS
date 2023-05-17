@@ -1,0 +1,41 @@
+@startuml
+actor Admin
+boundary ClientesResource
+participant ClienteSchema
+entity ClienteModel
+database data
+
+Admin -> ClientesResource: GET by Id (Request)
+activate ClientesResource
+ClientesResource -> ClienteModel: all 
+activate ClienteModel
+ClienteModel -> data: Select
+ClienteModel <- data: Registers
+ClienteSchema <- ClienteModel: collection objetcs
+deactivate ClienteModel
+activate ClienteSchema
+ClientesResource <- ClienteSchema: dump many=True
+deactivate ClienteSchema
+Admin <- ClientesResource: collection Json
+deactivate ClientesResource
+
+Admin -> ClientesResource: POST
+activate ClientesResource
+ClientesResource -> ClienteSchema: load Json
+activate ClienteSchema
+ClientesResource <- ClienteSchema: objetc clientes
+deactivate ClienteSchema
+ClientesResource -> ClienteModel: add
+activate ClienteModel
+ClientesResource -> ClienteModel: commit
+ClienteModel -> data: insert
+ClienteModel <- data: register Id
+ClienteSchema <- ClienteModel: objetc
+deactivate ClienteModel
+activate ClienteSchema
+ClientesResource <- ClienteSchema: Json
+deactivate ClienteSchema
+Admin <- ClientesResource: Json
+deactivate ClientesResource
+@enduml 
+

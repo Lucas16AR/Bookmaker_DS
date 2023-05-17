@@ -1,0 +1,57 @@
+@startuml
+actor Admin
+boundary EquipoControllers
+participant Equipo_Schema
+entity EquipoModels
+database data
+
+Admin -> EquipoControllers: GET by Id (Request)
+activate EquipoControllers
+EquipoControllers -> EquipoModels: get_or_404()
+activate EquipoModels
+EquipoModels -> data: query (SELECT)
+EquipoModels <- data: Register
+Equipo_Schema <- EquipoModels: Object cliente
+deactivate EquipoModels
+activate Equipo_Schema
+EquipoControllers <- Equipo_Schema: Json cliente
+deactivate Equipo_Schema
+Admin <- EquipoControllers: json (Response)
+deactivate EquipoControllers
+
+Admin -> EquipoControllers: PUT by Id (Request)
+activate EquipoControllers
+EquipoControllers -> EquipoModels: get_or_404()
+activate EquipoModels
+EquipoModels -> data: query (SELECT)
+EquipoModels <- data: Register
+EquipoControllers <- EquipoModels: Object cliente
+deactivate EquipoModels
+EquipoControllers -> EquipoModels: Add
+activate EquipoModels
+EquipoControllers -> EquipoModels: Commit
+EquipoModels -> data: UPDATE
+EquipoModels <- data: Register
+Equipo_Schema <- EquipoModels: Object cliente
+deactivate EquipoModels
+activate Equipo_Schema
+EquipoControllers <- Equipo_Schema: Json cliente
+deactivate Equipo_Schema
+Admin <- EquipoControllers: json (Response)
+deactivate EquipoControllers
+
+Admin -> EquipoControllers: DELETE by Id (Request)
+activate EquipoControllers
+EquipoControllers-> EquipoModels: get_or_404()
+activate EquipoModels
+EquipoModels -> data: query (SELECT)
+EquipoModels <- data: register
+deactivate EquipoModels
+EquipoControllers <- EquipoModels: delete
+activate EquipoModels
+EquipoControllers -> EquipoModels: Commit
+EquipoModels -> data: DELETE
+deactivate EquipoModels
+Admin <- EquipoControllers: Request(Status OK)
+deactivate EquipoControllers
+@enduml

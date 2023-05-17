@@ -1,0 +1,38 @@
+@startuml
+actor Cliente
+boundary ApuestaResource
+participant PartidoSchema
+participant ApuestaSchema
+participant PartidoModel
+participant ApuestaModel
+database data
+
+Cliente -> ApuestaResource: GET all
+activate ApuestaResource
+ApuestaResource -> PartidoModel: get all partidos finalizados
+activate PartidoModel
+PartidoModel -> data: select all
+PartidoModel <- data: registros partidos finalizados
+PartidoSchema <- PartidoModel: dump many=True
+deactivate PartidoModel
+activate PartidoSchema
+PartidoSchema -> ApuestaResource: collection Json
+deactivate PartidoSchema
+Cliente <- ApuestaResource: Json
+deactivate ApuestaResource
+
+Cliente -> ApuestaResource: POST
+activate ApuestaResource
+ApuestaResource -> ApuestaModel: guardar apuesta
+activate ApuestaModel
+ApuestaModel -> data: Insert
+ApuestaModel <- data: Object
+ApuestaSchema <- ApuestaModel: Dump Object
+deactivate ApuestaModel
+activate ApuestaSchema
+ApuestaSchema -> ApuestaResource: Json
+deactivate ApuestaSchema
+Cliente -> ApuestaResource: Json
+deactivate ApuestaResource
+
+@enduml

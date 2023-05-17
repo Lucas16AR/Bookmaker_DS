@@ -1,0 +1,60 @@
+@startuml
+actor Admin
+boundary ClienteResource
+participant ClienteSchema
+participant Services
+participant ClienteService
+participant RepositorioService
+entity ClienteModel
+database data
+Admin -> ClienteResource: GET by Id (Request)
+activate ClienteResource
+ClienteResource -> ClienteModel: get_or_404() 
+activate ClienteModel
+ClienteModel -> data: query (SELECT)
+ClienteModel <- data: Register
+ClienteSchema <- ClienteModel: Object cliente
+deactivate ClienteModel
+activate ClienteSchema
+ClienteResource <- ClienteSchema: Json cliente
+deactivate ClienteSchema
+Admin <- ClienteResource: json (Response)
+deactivate ClienteResource
+
+Admin -> ClienteResource: PUT by Id (Request)
+activate ClienteResource
+ClienteResource -> ClienteModel: get_or_404()
+activate ClienteModel
+ClienteModel -> data: query (SELECT)
+ClienteModel <- data: Register
+ClienteResource <- ClienteModel: Object cliente
+deactivate ClienteModel
+ClienteResource -> ClienteModel: Add
+activate ClienteModel
+ClienteResource -> ClienteModel: Commit
+ClienteModel -> data: UPDATE
+ClienteModel <- data: Register
+ClienteSchema <- ClienteModel: Object cliente
+deactivate ClienteModel
+activate ClienteSchema
+ClienteResource <- ClienteSchema: Json cliente
+deactivate ClienteSchema
+Admin <- ClienteResource: json (Response)
+deactivate ClienteResource
+
+Admin -> ClienteResource: DELETE by Id (Request)
+activate ClienteResource
+ClienteResource -> ClienteModel: get_or_404()
+activate ClienteModel
+ClienteModel -> data: query (SELECT)
+ClienteModel <- data: register
+ClienteResource <- ClienteModel
+deactivate ClienteModel
+ClienteResource <- ClienteModel: delete
+activate ClienteModel
+ClienteResource -> ClienteModel: Commit
+ClienteModel -> data: DELETE
+deactivate ClienteModel
+Admin <- ClienteResource: Request(Status OK)
+deactivate ClienteResource
+@enduml 

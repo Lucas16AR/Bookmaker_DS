@@ -1,0 +1,95 @@
+@startuml
+actor Admin
+boundary ClienteControllers
+participant Cliente_Schema
+participant Cliente_Services
+participant Respositories
+entity ClienteModels
+database data
+
+Admin -> ClienteControllers: GET by Id (Request)
+activate ClienteControllers
+ClienteControllers -> ClienteModels: get_or_404()
+activate ClienteModels
+ClienteModels -> data: query (SELECT)
+ClienteModels <- data: Register
+Cliente_Schema <- ClienteModels: Objecto cliente
+deactivate ClienteModels
+activate Cliente_Schema
+ClienteControllers <- Cliente_Schema: Json cliente
+deactivate Cliente_Schema
+Admin <- ClienteControllers: json (Response)
+deactivate ClienteControllers
+
+Admin -> ClienteControllers: PUT by Id (Request)
+activate ClienteControllers
+ClienteControllers -> ClienteModels: get_or_404()
+activate ClienteModels
+ClienteModels -> data: query (SELECT)
+ClienteModels <- data: Register
+ClienteControllers <- ClienteModels: Objecto cliente
+deactivate ClienteModels
+ClienteControllers -> ClienteModels: Add
+activate ClienteModels
+ClienteControllers -> ClienteModels: Commit
+ClienteModels -> data: UPDATE
+ClienteModels <- data: Register
+Cliente_Schema <- ClienteModels: Objecto cliente
+deactivate ClienteModels
+activate Cliente_Schema
+ClienteControllers <- Cliente_Schema: Json cliente
+deactivate Cliente_Schema
+Admin <- ClienteControllers: json (Response)
+deactivate ClienteControllers
+
+Admin -> ClienteControllers: DELETE by Id (Request)
+activate ClienteControllers
+ClienteControllers-> ClienteModels: get_or_404()
+activate ClienteModels
+ClienteModels -> data: query (SELECT)
+ClienteModels <- data: register
+deactivate ClienteModels
+ClienteControllers <- ClienteModels: delete
+activate ClienteModels
+ClienteControllers -> ClienteModels: Commit
+ClienteModels -> data: DELETE
+deactivate ClienteModels
+Admin <- ClienteControllers: Request(Status OK)
+deactivate ClienteControllers
+
+Admin -> ClientesControllers: GET by Id (Request)
+activate ClientesControllers
+ClientesControllers -> ClienteModels: All
+activate ClienteModels
+ClienteModels -> data: query (SELECT)
+ClienteModels <- data: Registros
+Cliente_Schema <- ClienteModels: Coleccion de objetos
+deactivate ClienteModels
+activate Cliente_Schema
+ClientesControllers <- Cliente_Schema: dump many=True
+deactivate Cliente_Schema
+Admin <- ClientesControllers: coleccion de json
+deactivate ClientesControllers
+
+Admin -> ClientesControllers: POST by Id (Request)
+activate ClientesControllers
+ClientesControllers -> Cliente_Schema: Load json
+activate Cliente_Schema
+ClientesControllers <- Cliente_Schema: Objeto cliente
+deactivate Cliente_Schema
+ClientesControllers -> ClienteModels: Add
+activate ClienteModels
+ClientesControllers -> ClienteModels: Commit
+ClienteModels -> data: Insert
+ClienteModels <- data: Registro con Id
+Cliente_Schema <- ClienteModels: Objeto
+deactivate ClienteModels
+activate Cliente_Schema
+ClientesControllers <- Cliente_Schema: Json
+deactivate Cliente_Schema
+Admin <- ClientesControllers: Json
+deactivate ClientesControllers
+
+@enduml
+
+
