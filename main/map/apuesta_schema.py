@@ -26,3 +26,5 @@ class ApuestaSchema(Schema):
         return {
             key: value for key, value in data.items() if key not in self.SKIP_VALUES
         }
+
+#Adapter

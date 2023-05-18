@@ -55,3 +55,5 @@ class CuotaEmpate(CuotaStrategy):
     def calcular_cuota(self, cuota):
         probabilidad = cuota.cuota_empate
         return probabilidad
+    
+#single_responsability

@@ -96,3 +96,5 @@ if __name__ == '__main__':
     logger.warning('Valor de la varaible', 456)
     logger.error('Valor de la variable', 789)
     logger.debug('Valor de la variable', 1011)
+
+#Factory
