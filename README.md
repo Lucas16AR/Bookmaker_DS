@@ -3,8 +3,10 @@ Sistema de apuestas
 
 # Instalacion
 Clonar el repositorio: 
-                      con SSH: git@github.com:Lucas16AR/Bookmaker_DS.git
-                      con HTTPS: https://github.com/Lucas16AR/Bookmaker_DS.git
+                      
+con SSH: git@github.com:Lucas16AR/Bookmaker_DS.git
+
+con HTTPS: https://github.com/Lucas16AR/Bookmaker_DS.git
 
 # Creacion entorno
 Crear un archivo .env utilizando de ejemplo .env-example
